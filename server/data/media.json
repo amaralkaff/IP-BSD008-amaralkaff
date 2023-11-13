@@ -1,0 +1,14 @@
+[
+    {
+      "id": 1,
+      "post_id": 1,
+      "file_path": "media/post1_pic.jpg",
+      "media_type": "image"
+    },
+    {
+      "id": 2,
+      "post_id": 2,
+      "file_path": "media/post2_video.mp4",
+      "media_type": "video"
+    }
+  ]

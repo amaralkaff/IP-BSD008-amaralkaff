@@ -1,0 +1,16 @@
+[
+    {
+      "id": 1,
+      "post_id": 1,
+      "user_id": 2,
+      "content": "User2's comment on user1's post",
+      "timestamp": "2023-11-13T14:00:00Z"
+    },
+    {
+      "id": 2,
+      "post_id": 2,
+      "user_id": 1,
+      "content": "User1's comment on user2's post",
+      "timestamp": "2023-11-13T15:00:00Z"
+    }
+  ]
