@@ -1,9 +1,9 @@
 // src/pages/PostPage.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import Comment from "../components/Comment";
 import CommentForm from "../components/CommentForm";
+import Comment from "../components/Comment";
 
 const PostPage = () => {
   const { id } = useParams();
@@ -11,8 +11,8 @@ const PostPage = () => {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [profile_picture, setProfilePicture] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [setLoading] = useState(true);
+  const [setError] = useState("");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
