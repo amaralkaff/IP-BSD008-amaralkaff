@@ -1,4 +1,4 @@
-// components/comment.jsx
+// components/Comment.jsx
 import { useCallback } from "react";
 import propTypes from "prop-types";
 
