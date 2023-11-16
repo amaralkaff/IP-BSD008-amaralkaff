@@ -1,5 +1,5 @@
 // pages/Register.jsx is the Register page component that will be rendered when the user clicks on the Register button on the Login page.
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -9,7 +9,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const navigate = useNavigate();
   const { setAuthState } = useContext(AuthContext);
 
@@ -49,6 +49,10 @@ const Register = () => {
     } catch (error) {
       console.error("Error during login:", error);
     }
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
   }
 
   return (

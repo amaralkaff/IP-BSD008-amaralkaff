@@ -1,5 +1,5 @@
 // components/CreatePostForm.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 const CreatePostForm = () => {
@@ -10,7 +10,6 @@ const CreatePostForm = () => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:3000/posts", { title, content });
-      // Handle successful post creation (maybe refresh the list of posts)
     } catch (error) {
       console.error("Error creating post:", error);
     }

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
 const PostCard = ({ post }) => {
-  const [liked, setLiked] = useState(post.likedByCurrentUser);
+  const [liked, setLiked] = useState(post.liked);
   const [likesCount, setLikesCount] = useState(post.likes);
   const [posts, setPosts] = useState([]);
   // removePost(post.id); remove is not defined
   const removePost = (id) => {
     setPosts(posts.filter((post) => post.id !== id));
   };
-  const [profilePicture, setProfilePicture] = useState(
+  const [profilePicture] = useState(
     post.user?.profile_picture || "default-profile-pic-url"
   );
 

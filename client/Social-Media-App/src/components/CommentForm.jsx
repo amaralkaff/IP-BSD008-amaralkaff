@@ -1,12 +1,12 @@
 // CommentForm.jsx
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
-import { AuthContext } from "../context/AuthContext"; // Import AuthContext for authentication
+import { AuthContext } from "../context/AuthContext";
 
 const CommentForm = ({ postId, onCommentAdded }) => {
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
-  const { authState } = useContext(AuthContext); // Use AuthContext
+  const { authState } = useContext(AuthContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {

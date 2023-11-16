@@ -1,6 +1,7 @@
 // components/CommentList.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import Comment from "./Comment";
 
 const CommentList = ({ postId }) => {
   const [comments, setComments] = useState([]);
@@ -34,7 +35,11 @@ const CommentList = ({ postId }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Comments</h2>
       {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} onDelete={handleDelete} />
+        <Comment
+          key={comment.id}
+          comment={comment}
+          onDelete={() => handleDelete(comment.id)}
+        />
       ))}
     </div>
   );

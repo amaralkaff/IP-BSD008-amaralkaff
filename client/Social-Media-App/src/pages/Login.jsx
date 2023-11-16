@@ -1,5 +1,5 @@
-// pages/Login.jsx is the Login page component that will be rendered when the user is not logged in.
-import React, { useState, useContext, useEffect } from "react";
+// pages/Login.jsx
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -11,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [userData, setUserData] = useState({}); // Add this line
+  const [userData] = useState({}); // Add this line
   const navigate = useNavigate();
   const { setAuthState } = useContext(AuthContext);
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -10,24 +9,62 @@ import CreateProfileForm from "../components/CreateProfileForm";
 import ProfileEdit from "../components/ProfileEdit";
 import TranslatorComponent from "../components/TranslatorComponent";
 
-function AppRoutes() {
+const AppRoutes = [
+  {
+    path: "/",
+    element: <NavBar />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/profile/:id",
+        element: <Profile />,
+      },
+      {
+        path: "/post/:id",
+        element: <PostPage />,
+      },
+      {
+        path: "/create-profile",
+        element: <CreateProfileForm />,
+      },
+      {
+        path: "/profile/:id/edit",
+        element: <ProfileEdit />,
+      },
+      {
+        path: "/translate",
+        element: <TranslatorComponent />,
+      },
+    ],
+  },
+];
+
+const AppRouter = () => {
   return (
     <Router>
-      <NavBar />
       <Routes>
-        {/* Protected Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/profiles/:id" element={<Profile />} />
-        <Route path="/posts/:id" element={<PostPage />} />
-        <Route path="/profiles/create" element={<CreateProfileForm />} />
-        <Route path="/profiles/edit/:id" element={<ProfileEdit />} />
-
-        {/* Public Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/translator" element={<TranslatorComponent />} />
+        {AppRoutes.map((route, index) => (
+          <Route
+            key={index}
+            path={route.path}
+            element={route.element}
+            children={route.children}
+          />
+        ))}
       </Routes>
     </Router>
   );
-}
-export default AppRoutes;
+};
+
+export default AppRouter;

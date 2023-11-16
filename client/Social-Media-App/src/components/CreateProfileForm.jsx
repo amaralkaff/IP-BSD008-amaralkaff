@@ -29,7 +29,6 @@ const CreateProfile = () => {
           },
         }
       );
-      // Assuming the server responds with the created profile
       navigate(`/profiles/${response.data.id}`);
     } catch (error) {
       setError("Failed to create profile. Please try again.");
