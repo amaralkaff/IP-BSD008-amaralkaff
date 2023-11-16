@@ -34,15 +34,30 @@ const getCommentById = async (req, res, next) => {
 
 const createComment = async (req, res, next) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({ message: "User not authenticated" });
+    // Ensure that the 'id' and 'content' are retrieved from the request body
+    const { id, content } = req.body;
+    console.log(req.body);
+    // Check if 'id' and 'content' are defined in the request body
+    if (id === undefined || content === undefined) {
+      return res
+        .status(400)
+        .json({ error: "Missing id or content in the request" });
     }
 
-    const newComment = await Comment.create({
-      ...req.body,
-      userId: req.user.id,
-    });
-    res.status(201).json(newComment);
+    console.log("Received id:", id);
+    console.log("Received content:", content);
+
+    // Create the comment with userId from the authenticated user
+    const commentData = {
+      userId: req.user.id, // Assuming userId is used to associate comments with users
+      id,
+      content,
+    };
+    console.log("Creating comment with data:", commentData);
+
+    const comment = await Comment.create(commentData);
+    console.log("Created comment:", comment);
+    res.status(201).json(comment);
   } catch (err) {
     next(err);
   }
@@ -52,7 +67,7 @@ const getCommentsByPost = async (req, res, next) => {
   try {
     const comments = await Comment.findAll({
       where: { postId: req.params.postId },
-      include: [{ model: User, attributes: ["name", "avatar"] }], // Adjust according to your user model
+      include: [User, Post],
     });
     res.json(comments);
   } catch (err) {

@@ -20,7 +20,9 @@ const getProfiles = async (req, res, next) => {
 
 const getProfileById = async (req, res, next) => {
   try {
-    const profile = await Profile.findByPk(req.params.id);
+    const profile = await Profile.findByPk(req.params.id, {
+      include: [User],
+    });
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
@@ -32,11 +34,7 @@ const getProfileById = async (req, res, next) => {
 
 const createProfile = async (req, res, next) => {
   try {
-    const profileData = {
-      ...req.body,
-      profile_picture: req.file ? req.file.path : null, // Check if file is uploaded
-    };
-
+    const profileData = req.body; // Directly use req.body
     const profile = await Profile.create(profileData);
     res.status(201).json(profile);
   } catch (err) {
@@ -51,12 +49,7 @@ const updateProfile = async (req, res, next) => {
       return res.status(404).json({ message: "Profile not found" });
     }
 
-    // Validate and sanitize req.body before updating
-    const updateData = {
-      ...req.body, // Add validation and sanitation logic here
-    };
-
-    const updatedProfile = await profile.update(updateData);
+    const updatedProfile = await profile.update(req.body); // Update profile with req.body
     res.status(200).json(updatedProfile);
   } catch (err) {
     next(err);

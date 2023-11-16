@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Media.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
       post_id: DataTypes.INTEGER,
       file_path: {
         type: DataTypes.STRING,

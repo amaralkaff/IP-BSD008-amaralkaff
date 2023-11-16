@@ -17,54 +17,42 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/GetAccessToken", async (req, res) => {
-  req.query.code;
-  const params =
-    "?client_id=" +
-    CLIENT_ID_GITHUB +
-    "&client_secret=" +
-    CLIENT_SECRET +
-    "&code=" +
-    req.query.code;
+  const params = new URLSearchParams({
+    client_id: CLIENT_ID_GITHUB,
+    client_secret: CLIENT_SECRET,
+    code: req.query.code,
+  });
 
-  await fetch(
-    "https://github.com/login/oauth/access_token" + params,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-      },
-    }
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        res.json(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  );
+  try {
+    const response = await fetch(
+      "https://github.com/login/oauth/access_token?" + params,
+      {
+        method: "POST",
+        headers: { Accept: "application/json" },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error while fetching access token");
+  }
 });
 
 app.get("/GetUserData", async (req, res) => {
-  req.get("Authorization");
-  await fetch("https://api.github.com/user", {
-    method: "GET",
-    headers: {
-      Authorization: req.get("Authorization"),
-    },
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      res.json(data);
-    })
-    .catch((error) => {
-      console.log(error);
+  try {
+    const response = await fetch("https://api.github.com/user", {
+      method: "GET",
+      headers: { Authorization: req.get("Authorization") },
     });
+    const data = await response.json();
+    console.log(data);
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error while fetching user data");
+  }
 });
 
 // Import routes

@@ -13,8 +13,8 @@ const authenticate = require("../middleware/authenticate");
 
 router.get("/", getComments);
 router.get("/:id", getCommentById);
-router.get("/post/:postId/comments", getCommentsByPost);
-router.post("/", authenticate, createComment);
+router.get("/post/:id", getCommentsByPost);
+router.post("/", createComment);
 router.put("/:id", updateComment);
 router.delete("/:id", deleteComment);
 
