@@ -1,41 +1,27 @@
-import React, { useEffect, useState, useMemo } from "react";
+// components/Comment.jsx
+import React, { useCallback } from "react";
 
-const CommentList = ({ postId }) => {
-  const [comments, setComments] = useState([]);
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/posts/${postId}/comments`
-        );
-        setComments(response.data);
-      } catch (error) {
-        console.error("Error fetching comments", error);
-      }
-    };
-
-    fetchComments();
-  }, [postId]);
-
-  const handleDelete = async (commentId) => {
-    try {
-      // Assuming an API endpoint for comment deletion
-      await axios.delete(`http://localhost:3000/comments/${commentId}`);
-      setComments(comments.filter((comment) => comment.id !== commentId));
-    } catch (error) {
-      console.error("Error deleting comment", error);
-    }
-  };
+const Comment = ({ comment, onDelete }) => {
+  const handleDelete = useCallback(() => {
+    onDelete(comment.id);
+  }, [comment.id, onDelete]);
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Comments</h2>
-      {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} onDelete={handleDelete} />
-      ))}
+    <div className="border-b border-gray-300 mb-2 pb-2">
+      <p className="font-semibold">{comment.User?.username}</p>
+      <p>{comment.content}</p>
+      {/* Add more comment details */}
+      <div className="flex items-center space-x-2">
+        <p className="text-xs text-gray-500">
+          {new Date(comment.createdAt).toLocaleString()}
+        </p>
+        {/* Add delete button */}
+        <button className="text-xs text-red-500" onClick={handleDelete}>
+          Delete
+        </button>
+      </div>
     </div>
   );
 };
 
-export default CommentList;
+export default Comment;

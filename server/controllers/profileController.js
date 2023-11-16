@@ -20,12 +20,15 @@ const getProfiles = async (req, res, next) => {
 
 const getProfileById = async (req, res, next) => {
   try {
-    const profile = await Profile.findByPk(req.params.id, {
+    let profile = await Profile.findByPk(req.params.id, {
       include: [User],
     });
+
     if (!profile) {
-      return res.status(404).json({ message: "Profile not found" });
+      // If profile is not found, create a new one
+      profile = await Profile.create({ userId: req.params.id });
     }
+
     res.status(200).json(profile);
   } catch (err) {
     next(err);
@@ -44,32 +47,14 @@ const createProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    const profile = await Profile.findByPk(req.params.id);
+    const { id } = req.params;
+    const profileData = req.body;
+    const profile = await Profile.findByPk(id);
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
-
-    const updatedProfile = await profile.update(req.body); // Update profile with req.body
-    res.status(200).json(updatedProfile);
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.updateProfile = async (req, res, next) => {
-  const { userId } = req.params;
-  const { imageUrl } = req.body; // Assuming the image URL is sent in the request body
-
-  try {
-    const profile = await Profile.findOne({ where: { userId: userId } });
-    if (!profile) {
-      return res.status(404).json({ message: "Profile not found" });
-    }
-
-    profile.profile_picture = imageUrl;
-    await profile.save();
-
-    res.status(200).json({ message: "Profile updated successfully" });
+    await profile.update(profileData);
+    res.status(200).json(profile);
   } catch (err) {
     next(err);
   }

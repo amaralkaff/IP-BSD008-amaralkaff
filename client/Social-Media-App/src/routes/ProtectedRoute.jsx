@@ -10,8 +10,4 @@ const ProtectedRoute = ({ children }) => {
   return isLoggedIn ? children : <Navigate to="/login" />;
 };
 
-ProtectedRoute.propTypes = {
-  children: propTypes.node.isRequired,
-};
-
 export default ProtectedRoute;

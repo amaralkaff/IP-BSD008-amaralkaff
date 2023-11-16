@@ -1,15 +1,12 @@
 import React, { useContext } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { googleLogout } from "@react-oauth/google";
 
 const NavBar = () => {
   const { authState, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
   const isLoggedIn = authState && authState.token;
-  const userId = authState.user ? authState.user.id : null; // Assuming the user object has an id
-  const username = authState.user ? authState.user.username : null;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -20,72 +17,77 @@ const NavBar = () => {
     navigate("/login");
   };
 
-  const shouldHideHomeLink = () => {
-    const hiddenPaths = ["/login", "/register", "/profiles/:id", "/posts/:id"];
-    return hiddenPaths.includes(location.pathname);
-  };
-
   return (
-    <nav className="bg-gradient-to-r from-indigo-500 via-indigo-500 to-pink-500 p-4 shadow-md">
+    <nav className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-white text-2xl font-semibold">
+        <Link to="/" className="text-white text-2xl font-bold">
+          {/* Logo or Brand Name */}
           <img
-            src="https://img.freepik.com/free-vector/red-rooster-cock-side-view-abstract_1284-16627.jpg?w=1060&t=st=1700070730~exp=1700071330~hmac=e4260fcedad55cad749f38fa6fe2791743a24f7d14c7f1520225e5bba9c3a7ec"
+            className="w-20 h-20"
+            src="https://panels.twitch.tv/panel-241851496-image-3ec669f7-33b8-4238-99eb-ec2919604610"
             alt="logo"
-            className="w-10 h-10 inline mr-2"
           />
         </Link>
-        <ul className="flex space-x-4">
-          {isLoggedIn && !shouldHideHomeLink() && (
+        <ul className="flex space-x-6">
+          {isLoggedIn ? (
             <>
-              <li>
-                <Link
-                  to="/"
-                  className="text-white hover:text-gray-300 transition duration-300"
-                >
+              {/* Logged in user navigation */}
+              <li className="hover:underline">
+                <Link to="/" className="text-white transition duration-300">
                   Home
                 </Link>
               </li>
-              <li>
+              <li className="hover:underline">
                 <Link
-                  to={`/profiles/${userId}`}
-                  className="text-white hover:text-gray-300 transition duration-300"
+                  to={`/profiles/${authState.user?.id}`}
+                  className="text-white transition duration-300"
                 >
                   My Profile
                 </Link>
               </li>
-            </>
-          )}
-          {!isLoggedIn && !shouldHideHomeLink() && (
-            <>
+              <li className="hover:underline">
+                <Link
+                  to="/translator"
+                  className="text-white transition duration-300"
+                >
+                  Translator
+                </Link>
+              </li>
+              <div className="flex items-center space-x-4">
+                <img
+                  src={authState.user?.avatar}
+                  alt={authState.user?.username}
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="text-white">{authState.user?.username}</span>
+              </div>
               <li>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              {/* Guest user navigation */}
+              <li className="hover:underline">
                 <Link
                   to="/login"
-                  className="text-white hover:text-gray-300 transition duration-300"
+                  className="text-white transition duration-300"
                 >
                   Login
                 </Link>
               </li>
-              <li>
+              <li className="hover:underline">
                 <Link
                   to="/register"
-                  className="text-white hover:text-gray-300 transition duration-300"
+                  className="text-white transition duration-300"
                 >
                   Register
                 </Link>
-              </li>
-            </>
-          )}
-          {isLoggedIn && (
-            <>
-              <li className="text-white">Welcome, {username || "User"}!</li>
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-                >
-                  Logout
-                </button>
               </li>
             </>
           )}

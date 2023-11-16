@@ -1,7 +1,7 @@
 // pages/Home.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import PostCard from "../components/PostCard"; // Make sure to use PostCard
+import PostCard from "../components/PostCard";
 import { useAuth } from "../hooks/useAuth";
 
 const Home = () => {

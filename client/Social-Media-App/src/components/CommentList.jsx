@@ -36,13 +36,6 @@ const CommentList = ({ postId }) => {
       {comments.map((comment) => (
         <Comment key={comment.id} comment={comment} onDelete={handleDelete} />
       ))}
-          <p className="font-semibold">{comment.User?.username}</p>
-          <p>{comment.content}</p>
-          <p className="text-xs text-gray-500">
-            {new Date(comment.createdAt).toLocaleString()}
-          </p>
-        </div>
-      ))}
     </div>
   );
 };

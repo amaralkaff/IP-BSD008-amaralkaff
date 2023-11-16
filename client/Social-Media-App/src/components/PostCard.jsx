@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const PostCard = ({ post }) => {
     setLikesCount(post.likes);
   });
 
-  const handleLike = useCallback(async () => {
+  const handleLike = async () => {
     try {
       const response = await axios.post(
         `http://localhost:3000/posts/${post.id}/like`
@@ -28,9 +28,9 @@ const PostCard = ({ post }) => {
     } catch (error) {
       console.error("Error liking post:", error);
     }
-  });
+  };
 
-  const handleUnlike = useCallback(async () => {
+  const handleUnlike = async () => {
     try {
       const response = await axios.post(
         `http://localhost:3000/posts/${post.id}/unlike`
@@ -40,9 +40,9 @@ const PostCard = ({ post }) => {
     } catch (error) {
       console.error("Error unliking post:", error);
     }
-  });
+  };
 
-  const handleDelete = useCallback(async () => {
+  async function handleDelete() {
     try {
       await axios.delete(`http://localhost:3000/posts/${post.id}`);
       // Assuming a function to remove the post from the UI
@@ -50,7 +50,7 @@ const PostCard = ({ post }) => {
     } catch (error) {
       console.error("Error deleting post:", error);
     }
-  });
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg">

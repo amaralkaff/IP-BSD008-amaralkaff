@@ -34,32 +34,28 @@ const getCommentById = async (req, res, next) => {
 
 const createComment = async (req, res, next) => {
   try {
-    // Ensure that the 'id' and 'content' are retrieved from the request body
-    const { id, content } = req.body;
-    console.log(req.body);
-    // Check if 'id' and 'content' are defined in the request body
-    if (id === undefined || content === undefined) {
-      return res
-        .status(400)
-        .json({ error: "Missing id or content in the request" });
+    const { postId, content } = req.body;
+
+    if (!postId || !content) {
+      return res.status(400).json({ error: "Missing postId or content" });
     }
 
-    console.log("Received id:", id);
-    console.log("Received content:", content);
+    // Check if req.user is defined
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
 
-    // Create the comment with userId from the authenticated user
     const commentData = {
-      userId: req.user.id, // Assuming userId is used to associate comments with users
-      id,
+      userId: req.user.id,
+      postId,
       content,
     };
-    console.log("Creating comment with data:", commentData);
 
     const comment = await Comment.create(commentData);
-    console.log("Created comment:", comment);
     res.status(201).json(comment);
   } catch (err) {
-    next(err);
+    console.error("Error creating comment:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
