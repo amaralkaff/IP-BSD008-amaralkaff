@@ -33,6 +33,9 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Media");
+    await queryInterface.dropTable("Media", {
+      cascade: true,
+      restartIdentity: true,
+    });
   },
 };

@@ -1,5 +1,4 @@
-//controllers/userController.js
-const { User, Profile, Post, Comment, Like, Media } = require("../models");
+const { User, Profile, Post } = require("../models");
 
 const getUsers = async (req, res, next) => {
   try {
@@ -35,7 +34,13 @@ const getUserById = async (req, res, next) => {
         },
       ],
     });
-    res.status(200).json(user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { password, ...safeUserData } = user.get({ plain: true });
+    res.status(200).json(safeUserData);
   } catch (err) {
     next(err);
   }

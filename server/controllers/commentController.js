@@ -34,8 +34,27 @@ const getCommentById = async (req, res, next) => {
 
 const createComment = async (req, res, next) => {
   try {
-    const comment = await Comment.create(req.body);
-    res.status(201).json(comment);
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    const newComment = await Comment.create({
+      ...req.body,
+      userId: req.user.id,
+    });
+    res.status(201).json(newComment);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getCommentsByPost = async (req, res, next) => {
+  try {
+    const comments = await Comment.findAll({
+      where: { postId: req.params.postId },
+      include: [{ model: User, attributes: ["name", "avatar"] }], // Adjust according to your user model
+    });
+    res.json(comments);
   } catch (err) {
     next(err);
   }
@@ -70,6 +89,7 @@ const deleteComment = async (req, res, next) => {
 module.exports = {
   getComments,
   getCommentById,
+  getCommentsByPost,
   createComment,
   updateComment,
   deleteComment,

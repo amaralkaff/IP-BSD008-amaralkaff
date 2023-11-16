@@ -40,6 +40,9 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Comments");
+    await queryInterface.dropTable("Comments", {
+      cascade: true,
+      restartIdentity: true,
+    });
   },
 };

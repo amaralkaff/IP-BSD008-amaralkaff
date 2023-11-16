@@ -34,6 +34,9 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Profiles");
+    await queryInterface.dropTable("Profiles", {
+      cascade: true,
+      restartIdentity: true,
+    });
   },
 };

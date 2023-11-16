@@ -1,40 +1,43 @@
-// controllers/authController.js
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { User } = require("../models");
-const passport = require("../auth/githubStrategy");
+const { OAuth2Client } = require("google-auth-library");
+// const passport = require("../auth/githubStrategy");
 
-exports.githubAuth = passport.authenticate("github");
-
-exports.githubAuthCallback = (req, res, next) => {
-  passport.authenticate(
-    "github",
-    { failureRedirect: "/login" },
-    (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.redirect("/login");
-      }
-      req.logIn(user, function (err) {
-        if (err) {
-          return next(err);
-        }
-        return res.redirect("/");
-      });
-    }
-  )(req, res, next);
-};
+// exports.checkSession = (req, res) => {
+//   if (req.isAuthenticated()) {
+//     res.json({ user: req.user });
+//     console.log(req.isAuthenticated, "<<<<<");
+//   } else {
+//     res.status(401).json({ message: "Not authenticated" });
+//   }
+// };
 
 exports.register = async (req, res, next) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const { email, password, ...otherData } = req.body;
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
+    }
+    2;
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists." });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
     const user = await User.create({
-      ...req.body,
+      email,
       password: hashedPassword,
+      ...otherData,
     });
-    const { password, ...userData } = user.get({ plain: true });
+
+    const { password: _, ...userData } = user.get({ plain: true });
     res.status(201).json(userData);
   } catch (err) {
     next(err);
@@ -43,16 +46,38 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: { email: req.body.email } });
-    if (user && bcrypt.compareSync(req.body.password, user.password)) {
-      const token = jwt.sign({ id: user.id }, "your_secret_key", {
-        expiresIn: "1h",
-      });
-      res.json({ message: "Logged in successfully!", token });
-    } else {
-      res.status(401).send("Invalid credentials");
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
     }
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign({ id: user.id }, "your_secret_key", {
+      expiresIn: "1h",
+    });
+    console.log(token);
+
+    res.json({
+      message: "Logged in successfully!",
+      token,
+      user: { id: user.id, email: user.email, username: user.username },
+    });
   } catch (err) {
     next(err);
   }
 };
+
+function createToken(userId) {
+  return jwt.sign({ id: userId }, "your_secret_key", { expiresIn: "1h" });
+}

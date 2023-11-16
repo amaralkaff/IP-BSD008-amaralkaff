@@ -1,26 +1,12 @@
-// controllers/postController.js
 const { Post, Comment, Like, Media } = require("../models");
 
 const getPosts = async (req, res, next) => {
   try {
     const posts = await Post.findAll({
       include: [
-        {
-          model: Comment,
-          attributes: ["id", "content", "timestamp"],
-          include: {
-            model: User,
-            attributes: ["id", "email"],
-          },
-        },
-        {
-          model: Like,
-          attributes: ["id"],
-        },
-        {
-          model: Media,
-          attributes: ["id", "file_path", "media_type"],
-        },
+        { model: Comment, attributes: ["id", "content", "timestamp"] },
+        { model: Like, attributes: ["id"] },
+        { model: Media, attributes: ["id", "file_path", "media_type"] },
       ],
     });
     res.status(200).json(posts);
@@ -34,6 +20,9 @@ const getPostById = async (req, res, next) => {
     const post = await Post.findByPk(req.params.id, {
       include: [Comment, Like, Media],
     });
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
     res.status(200).json(post);
   } catch (err) {
     next(err);
@@ -41,6 +30,7 @@ const getPostById = async (req, res, next) => {
 };
 
 const createPost = async (req, res, next) => {
+  // Add authentication check here
   try {
     const post = await Post.create(req.body);
     res.status(201).json(post);
@@ -49,8 +39,4 @@ const createPost = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  getPosts,
-  getPostById,
-  createPost,
-};
+module.exports = { getPosts, getPostById, createPost };
