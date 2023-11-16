@@ -1,22 +1,22 @@
-// middleware/authenticate.js (Example)
-const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const admin = require("firebase-admin");
 
-const authenticate = async (req, res, next) => {
+// Initialize Firebase Admin SDK (if not already done)
+// admin.initializeApp({ ... });
+
+const checkAuth = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).send({ status: "error", message: "Unauthorized" });
+  }
+
+  const idToken = authHeader.split(" ")[1];
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findByPk(decoded.id);
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    req.user = user;
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    req.user = decodedToken;
     next();
   } catch (error) {
-    res.status(401).send({ message: "Unauthorized" });
+    res.status(401).send({ status: "error", message: "Unauthorized" });
   }
 };
 
-module.exports = authenticate;
+module.exports = checkAuth;

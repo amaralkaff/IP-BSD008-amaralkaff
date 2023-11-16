@@ -1,4 +1,4 @@
-// pages/Register.jsx is the Register page component that will be rendered when the user clicks on the Register button on the Login page.
+// pages/Register.jsx
 import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

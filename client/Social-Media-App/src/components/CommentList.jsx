@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Comment from "./Comment";
+import propTypes from "prop-types";
 
 const CommentList = ({ postId }) => {
   const [comments, setComments] = useState([]);
@@ -43,6 +44,10 @@ const CommentList = ({ postId }) => {
       ))}
     </div>
   );
+};
+
+CommentList.propTypes = {
+  postId: propTypes.number.isRequired,
 };
 
 export default CommentList;

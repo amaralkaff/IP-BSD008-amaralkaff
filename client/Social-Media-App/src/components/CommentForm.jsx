@@ -2,6 +2,7 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import propTypes from "prop-types";
 
 const CommentForm = ({ postId, onCommentAdded }) => {
   const [content, setContent] = useState("");
@@ -48,6 +49,11 @@ const CommentForm = ({ postId, onCommentAdded }) => {
       </button>
     </form>
   );
+};
+
+CommentForm.propTypes = {
+  postId: propTypes.number.isRequired,
+  onCommentAdded: propTypes.func.isRequired,
 };
 
 export default CommentForm;
