@@ -1,5 +1,6 @@
-// components/Comment.jsx
+// components/comment.jsx
 import React, { useCallback } from "react";
+import Comment from "../components/Comment";
 
 const Comment = ({ comment, onDelete }) => {
   const handleDelete = useCallback(() => {
