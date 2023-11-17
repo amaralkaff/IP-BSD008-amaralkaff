@@ -31,6 +31,7 @@ const Login = () => {
       setLoginError(error.message);
     }
   };
+
   async function googleLogin(codeResponse) {
     try {
       const googleToken = codeResponse?.credential;
