@@ -1,70 +1,77 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Profile from "../pages/Profile";
 import PostPage from "../pages/PostPage";
 import NavBar from "../components/NavBar";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import ProtectedRoute from "./ProtectedRoute";
 import CreateProfileForm from "../components/CreateProfileForm";
 import ProfileEdit from "../components/ProfileEdit";
 import TranslatorComponent from "../components/TranslatorComponent";
 
-const AppRoutes = [
-  {
-    path: "/",
-    element: <NavBar />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "/profile/:id",
-        element: <Profile />,
-      },
-      {
-        path: "/post/:id",
-        element: <PostPage />,
-      },
-      {
-        path: "/create-profile",
-        element: <CreateProfileForm />,
-      },
-      {
-        path: "/profile/:id/edit",
-        element: <ProfileEdit />,
-      },
-      {
-        path: "/translate",
-        element: <TranslatorComponent />,
-      },
-    ],
-  },
-];
-
-const AppRouter = () => {
+function AppRoutes() {
   return (
     <Router>
+      <NavBar />
       <Routes>
-        {AppRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={route.element}
-            children={route.children}
-          />
-        ))}
+        {/* Protected Routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profiles/:id"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/posts/:id"
+          element={
+            <ProtectedRoute>
+              <PostPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profiles/create"
+          element={
+            <ProtectedRoute>
+              <CreateProfileForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profiles/edit/:id"
+          element={
+            <ProtectedRoute>
+              <ProfileEdit />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/translator"
+          element={
+            <ProtectedRoute>
+              <TranslatorComponent />
+            </ProtectedRoute>
+          }
+        />
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        {/* Catch all route */}
       </Routes>
     </Router>
   );
-};
+}
 
-export default AppRouter;
+export default AppRoutes;

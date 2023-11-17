@@ -9,7 +9,7 @@ const CLIENT_ID_GITHUB = "827517944c04238a7f37";
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const bodyParser = require("body-parser");
-const CLIENT_SECRET = "749ecbfe0a83b9dae3c2e797641b0ab598b491e6";
+const CLIENT_SECRET = "81b5c6ef7b153647a28d1abe466a772c6d23d0f3";
 
 // Enable CORS
 app.use(cors());

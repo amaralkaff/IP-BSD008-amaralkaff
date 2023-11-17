@@ -4,7 +4,7 @@ import axios from "axios";
 const TranslatorComponent = () => {
   const [text, setText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
-  const [targetLang, setTargetLang] = useState("id"); // Default to Indonesian
+  const [targetLang, setTargetLang] = useState("id");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -29,8 +29,6 @@ const TranslatorComponent = () => {
           },
         }
       );
-
-      // Update this line based on the actual structure of the API response
       setTranslatedText(response.data.data.translatedText);
     } catch (error) {
       setError("Failed to translate text");

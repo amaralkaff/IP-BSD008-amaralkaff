@@ -4,27 +4,37 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
-
-const CLIENT_ID = "827517944c04238a7f37"; // Keep as a constant
+import { auth, GithubAuthProvider } from "../firebaseOauthConfig";
+import { signInWithPopup } from "firebase/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [userData] = useState({}); // Add this line
+  const [userData] = useState({});
   const navigate = useNavigate();
   const { setAuthState } = useContext(AuthContext);
 
-  useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const codeParam = urlParams.get("code");
+  const handleGithubLogin = async () => {
+    try {
+      const provider = new GithubAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const credential = GithubAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
 
-    if (codeParam && !localStorage.getItem("token")) {
-      getAccessToken(codeParam);
+      const user = result.user;
+      console.log("user", user);
+
+      setAuthState({ token: token, user: user });
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", user.displayName);
+
+      navigate("/");
+    } catch (error) {
+      console.error("Error during GitHub login:", error);
+      setLoginError(error.message);
     }
-  }, []);
-
+  };
   async function googleLogin(codeResponse) {
     try {
       const googleToken = codeResponse?.credential;
@@ -57,6 +67,7 @@ const Login = () => {
         }
       );
       const data = await response.json();
+      console.log("data", data);
       if (data.access_token) {
         localStorage.setItem("token", data.access_token);
         setAuthState({ token: data.access_token, user: userData });
@@ -65,12 +76,6 @@ const Login = () => {
     } catch (error) {
       console.error("Error fetching access token:", error);
     }
-  };
-
-  const loginWithGithub = () => {
-    window.location.assign(
-      `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}`
-    );
   };
 
   const handleSubmit = async (e) => {
@@ -84,6 +89,7 @@ const Login = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.user.username);
       setAuthState({ token: response.data.token, user: response.data.user });
+      console.log(response, "<<<");
       navigate("/");
     } catch (error) {
       if (error.response && error.response.data) {
@@ -148,7 +154,7 @@ const Login = () => {
         <div className="flex items-center justify-center mt-4">
           <button
             type="button"
-            onClick={loginWithGithub}
+            onClick={handleGithubLogin}
             className="w-8 h-8 rounded-full bg-gray-100 p-1 mr-2"
           >
             <svg

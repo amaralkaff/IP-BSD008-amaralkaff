@@ -3,9 +3,13 @@ import { useCallback } from "react";
 import propTypes from "prop-types";
 
 let Comment = ({ comment, onDelete }) => {
-  let handleDelete = useCallback(() => {
-    onDelete(comment.id);
-  }, [comment.id, onDelete]);
+  if (!comment) {
+    const [loading, setLoading] = useState(false);
+
+    return null;
+  }
+
+  setLoading?.(true);
 
   return (
     <div className="flex space-x-2">
