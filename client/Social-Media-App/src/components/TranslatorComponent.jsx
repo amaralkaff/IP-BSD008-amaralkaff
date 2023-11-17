@@ -73,6 +73,7 @@ const TranslatorComponent = () => {
               <option value="fr">French</option>
               <option value="de">German</option>
               <option value="it">Italian</option>
+              <option value="ru">Russia</option>
             </select>
           </label>
           <button

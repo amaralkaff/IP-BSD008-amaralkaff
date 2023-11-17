@@ -11,7 +11,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [userData] = useState({});
   const navigate = useNavigate();
   const { setAuthState } = useContext(AuthContext);
 
@@ -26,9 +25,6 @@ const Login = () => {
       console.log("user", user);
 
       setAuthState({ token: token, user: user });
-      localStorage.setItem("token", token);
-      localStorage.setItem("username", user.displayName);
-
       navigate("/");
     } catch (error) {
       console.error("Error during GitHub login:", error);
@@ -57,26 +53,6 @@ const Login = () => {
       console.error("Error during login:", error);
     }
   }
-
-  const getAccessToken = async (codeParam) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/GetAccessToken?code=${codeParam}`,
-        {
-          method: "GET",
-        }
-      );
-      const data = await response.json();
-      console.log("data", data);
-      if (data.access_token) {
-        localStorage.setItem("token", data.access_token);
-        setAuthState({ token: data.access_token, user: userData });
-        navigate("/");
-      }
-    } catch (error) {
-      console.error("Error fetching access token:", error);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
