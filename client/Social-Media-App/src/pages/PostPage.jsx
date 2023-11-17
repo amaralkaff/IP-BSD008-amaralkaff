@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import CommentForm from "../components/CommentForm";
-import Comment from "../components/Comment";
+import Comment from "../components/CommentCard";
 
 const PostPage = () => {
   const { id } = useParams();
