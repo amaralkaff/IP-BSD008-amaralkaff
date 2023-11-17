@@ -24,7 +24,6 @@ const CommentList = ({ postId }) => {
 
   const handleDelete = async (commentId) => {
     try {
-      // Assuming an API endpoint for comment deletion
       await axios.delete(`http://localhost:3000/comments/${commentId}`);
       setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {

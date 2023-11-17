@@ -30,7 +30,6 @@ const getPostById = async (req, res, next) => {
 };
 
 const createPost = async (req, res, next) => {
-  // Add authentication check here
   try {
     const post = await Post.create(req.body);
     res.status(201).json(post);

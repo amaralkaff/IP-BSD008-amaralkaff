@@ -1,8 +1,5 @@
 const admin = require("firebase-admin");
 
-// Initialize Firebase Admin SDK (if not already done)
-// admin.initializeApp({ ... });
-
 const checkAuth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

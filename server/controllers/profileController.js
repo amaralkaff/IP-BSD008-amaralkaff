@@ -25,7 +25,6 @@ const getProfileById = async (req, res, next) => {
     });
 
     if (!profile) {
-      // If profile is not found, create a new one
       profile = await Profile.create({ userId: req.params.id });
     }
 

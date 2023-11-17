@@ -40,7 +40,6 @@ const createComment = async (req, res, next) => {
       return res.status(400).json({ error: "Missing postId or content" });
     }
 
-    // Check if req.user is defined
     if (!req.user || !req.user.id) {
       return res.status(401).json({ error: "Unauthorized" });
     }

@@ -1,4 +1,3 @@
-// Example middleware for token validation (Node.js/Express)
 const jwt = require("jsonwebtoken");
 
 const authenticateToken = (req, res, next) => {

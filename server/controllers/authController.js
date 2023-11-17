@@ -2,16 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { User } = require("../models");
 const { OAuth2Client } = require("google-auth-library");
-// const passport = require("../auth/githubStrategy");
-
-// exports.checkSession = (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.json({ user: req.user });
-//     console.log(req.isAuthenticated, "<<<<<");
-//   } else {
-//     res.status(401).json({ message: "Not authenticated" });
-//   }
-// };
 
 exports.register = async (req, res, next) => {
   try {
@@ -27,10 +17,8 @@ exports.register = async (req, res, next) => {
       return res.status(409).json({ message: "User already exists." });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
     const user = await User.create({
       email,
       password: hashedPassword,
