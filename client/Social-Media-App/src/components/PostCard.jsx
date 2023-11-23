@@ -7,7 +7,6 @@ const PostCard = ({ post }) => {
   const [liked, setLiked] = useState(post.liked);
   const [likesCount, setLikesCount] = useState(post.likes);
   const [posts, setPosts] = useState([]);
-  removePost(post.id);
   const removePost = (id) => {
     setPosts(posts.filter((post) => post.id !== id));
   };
