@@ -6,9 +6,7 @@
   this is my link deployed on vercel: 
 </h1>
 
-<p align="center">
-  <a [href="https://individual-project-phase-2.vercel.app/">https://individual-project-phase-2.vercel.app/</a>](https://ip-bsd-008-amaralkaff-a9pb.vercel.app/)
-</p>
+https://ip-bsd-008-amaralkaff-a9pb.vercel.app/
 
 ## Description
 
