@@ -1,18 +1,9 @@
 //app.js
 const express = require("express");
-const passport = require("passport");
 const app = express();
-const port = 3000;
 const errorHandler = require("./middleware/errorHandler");
 const cors = require("cors");
-const CLIENT_ID_GITHUB = "827517944c04238a7f37";
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const bodyParser = require("body-parser");
-const CLIENT_SECRET = "81b5c6ef7b153647a28d1abe466a772c6d23d0f3";
-function createToken(userId) {
-  return jwt.sign({ id: userId }, "your_secret_key", { expiresIn: "1h" });
-}
 
 // Enable CORS
 app.use(cors());
