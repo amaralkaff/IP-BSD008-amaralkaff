@@ -64,7 +64,6 @@ const profileRoutes = require("./routes/profileRoutes");
 
 // Use routes
 app.use("/auth", authRoutes);
-
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 app.use("/comments", commentRoutes);
@@ -74,6 +73,6 @@ app.use(errorHandler);
 
 module.exports = app;
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running at http://localhost:${port}`);
+// });
