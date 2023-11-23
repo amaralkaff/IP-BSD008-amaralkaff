@@ -10,5 +10,6 @@ router.post("/login", authController.login);
 router.put("/profile/update/:userId", updateProfile);
 //google login
 router.post("/google-login", AuthController.googleLogin);
+router.post("/github", authController.githubLogin);
 
 module.exports = router;

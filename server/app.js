@@ -10,50 +10,14 @@ const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const bodyParser = require("body-parser");
 const CLIENT_SECRET = "81b5c6ef7b153647a28d1abe466a772c6d23d0f3";
+function createToken(userId) {
+  return jwt.sign({ id: userId }, "your_secret_key", { expiresIn: "1h" });
+}
 
 // Enable CORS
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
-
-app.get("/GetAccessToken", async (req, res) => {
-  const params = new URLSearchParams({
-    client_id: CLIENT_ID_GITHUB,
-    client_secret: CLIENT_SECRET,
-    code: req.query.code,
-  });
-
-  try {
-    const response = await fetch(
-      "https://github.com/login/oauth/access_token?" + params,
-      {
-        method: "POST",
-        headers: { Accept: "application/json" },
-      }
-    );
-    const data = await response.json();
-    console.log(data);
-    res.json(data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error while fetching access token");
-  }
-});
-
-app.get("/GetUserData", async (req, res) => {
-  try {
-    const response = await fetch("https://api.github.com/user", {
-      method: "GET",
-      headers: { Authorization: req.get("Authorization") },
-    });
-    const data = await response.json();
-    console.log(data);
-    res.json(data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error while fetching user data");
-  }
-});
 
 // Import routes
 const authRoutes = require("./routes/authRoutes");

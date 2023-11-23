@@ -66,6 +66,39 @@ exports.login = async (req, res, next) => {
   }
 };
 
-function createToken(userId) {
-  return jwt.sign({ id: userId }, "your_secret_key", { expiresIn: "1h" });
-}
+exports.githubLogin = async (req, res, next) => {
+  try {
+    const { githubToken } = req.body;
+    const githubUserResponse = await fetch("https://api.github.com/user", {
+      headers: { Authorization: `Bearer ${githubToken}` },
+    });
+
+    if (!githubUserResponse.ok) {
+      throw new Error("Failed to fetch user data from GitHub.");
+    }
+
+    const githubUserData = await githubUserResponse.json();
+    let user = await User.findOne({ where: { email: githubUserData.email } });
+
+    if (!user) {
+      user = await User.create({
+        email: githubUserData.email,
+        username: githubUserData.login,
+      });
+    }
+    const appToken = jwt.sign({ userId: user.id }, "your_jwt_secret", {
+      expiresIn: "1h",
+    });
+    res.json({
+      token: appToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+      },
+    });
+  } catch (error) {
+    console.error("Error in GitHub login:", error);
+    res.status(500).send("An error occurred during GitHub authentication.");
+  }
+};

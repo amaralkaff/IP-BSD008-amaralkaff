@@ -1,6 +1,6 @@
 // components/Comment.jsx
 import { useCallback } from "react";
-import propTypes from "prop-types";
+import { useState } from "react";
 
 let Comment = ({ comment, onDelete }) => {
   if (!comment) {
@@ -32,18 +32,6 @@ let Comment = ({ comment, onDelete }) => {
       </div>
     </div>
   );
-};
-
-Comment.propTypes = {
-  comment: propTypes.shape({
-    id: propTypes.number.isRequired,
-    content: propTypes.string.isRequired,
-    User: propTypes.shape({
-      name: propTypes.string.isRequired,
-      profile_picture: propTypes.string.isRequired,
-    }),
-  }),
-  onDelete: propTypes.func.isRequired,
 };
 
 export default Comment;

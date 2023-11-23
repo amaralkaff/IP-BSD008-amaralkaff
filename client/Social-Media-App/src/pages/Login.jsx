@@ -1,5 +1,5 @@
 // pages/Login.jsx
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -20,11 +20,14 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const credential = GithubAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
+      const response = await axios.post("http://localhost:3000/auth/github", {
+        githubToken: token,
+      });
+      const serverToken = response.data.token;
+      const serverUser = response.data.user;
 
-      const user = result.user;
-      console.log("user", user);
-
-      setAuthState({ token: token, user: user });
+      setAuthState({ token: serverToken, user: serverUser });
+      localStorage.setItem("token", serverToken);
       navigate("/");
     } catch (error) {
       console.error("Error during GitHub login:", error);
